@@ -1,0 +1,18 @@
+{
+  "headers": [
+    {
+      "source": "/mahmud-picks.m3u",
+      "headers": [
+        { "key": "Content-Type", "value": "application/x-mpegurl" },
+        { "key": "Cache-Control", "value": "public, max-age=300" }
+      ]
+    },
+    {
+      "source": "/IPTV-Flow-World-Cup.m3u",
+      "headers": [
+        { "key": "Content-Type", "value": "application/x-mpegurl" },
+        { "key": "Cache-Control", "value": "public, max-age=300" }
+      ]
+    }
+  ]
+}

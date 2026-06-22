@@ -1,0 +1,160 @@
+@import "tailwindcss";
+
+:root {
+  /* Core Backgrounds */
+  --bg-void: #080810;
+  --bg-primary: #0D0D18;
+  --bg-surface: #13131F;
+  --bg-elevated: #1A1A2E;
+  --bg-hover: #22223A;
+
+  /* Accent — Sports Gold */
+  --accent-gold: #F5B800;
+  --accent-gold-dim: #B38900;
+  --accent-gold-glow: rgba(245, 184, 0, 0.15);
+
+  /* Accent — Live Red */
+  --accent-live: #FF2D2D;
+  --accent-live-glow: rgba(255, 45, 45, 0.2);
+
+  /* Accent — Electric Blue */
+  --accent-blue: #1A6FFF;
+  --accent-blue-dim: #1050CC;
+
+  /* Text */
+  --text-primary: #F0F0F8;
+  --text-secondary: #8A8AA8;
+  --text-muted: #4A4A68;
+  --text-gold: #F5B800;
+
+  /* Borders */
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-active: rgba(245, 184, 0, 0.5);
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-gold: 0 0 20px rgba(245, 184, 0, 0.25);
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.5);
+}
+
+@theme {
+  --color-bg-void: var(--bg-void);
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-bg-hover: var(--bg-hover);
+  
+  --color-gold: var(--accent-gold);
+  --color-gold-dim: var(--accent-gold-dim);
+  
+  --color-live: var(--accent-live);
+  --color-accent-blue: var(--accent-blue);
+  
+  --color-border-subtle: var(--border-subtle);
+  --color-border-active: var(--border-active);
+  
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-text-gold: var(--text-gold);
+
+  --font-display: var(--font-barlow-condensed), sans-serif;
+  --font-body: var(--font-inter), sans-serif;
+
+  --animate-pulse-dot: pulse-dot 1.4s ease-in-out infinite;
+  --animate-shimmer: shimmer 1.5s infinite linear;
+  --animate-spin-slow: spin 8s linear infinite;
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.25; }
+  }
+  @keyframes shimmer {
+    0% { background-position: -400px 0; }
+    100% { background-position: 400px 0; }
+  }
+}
+
+/* Custom global styles */
+body {
+  background-color: var(--bg-void);
+  color: var(--text-primary);
+  font-family: var(--font-inter), sans-serif;
+  overflow-x: hidden;
+}
+
+/* Scrollbar styles - completely hidden by default on scroll rows */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Scrollbar styles for general scrollables */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-void);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--bg-surface);
+  border-radius: var(--radius-sm);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bg-elevated);
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-surface) 25%, var(--bg-elevated) 50%, var(--bg-surface) 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: var(--radius-md);
+}
+
+/* Shared Live Badge CSS */
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-display);
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--accent-live);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.live-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-live);
+  animation: pulse-dot 1.4s ease-in-out infinite;
+}
+
+/* Layout helpers */
+.aspect-video {
+  aspect-ratio: 16/9;
+}
+
+/* Force text selection globally, overriding select-none classes */
+* {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+}
+
+/* Prevent text highlighting on interactive control elements */
+video, img, button {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
