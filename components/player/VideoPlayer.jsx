@@ -277,18 +277,44 @@ export default function VideoPlayer({ channel, channelsList, onClose, className 
     if (!containerRef.current) return;
     if (!document.fullscreenElement) {
       containerRef.current.requestFullscreen()
-        .then(() => setIsFullscreen(true))
+        .then(() => {
+          setIsFullscreen(true);
+          // Try to lock orientation to landscape on mobile devices
+          if (window.screen && window.screen.orientation && window.screen.orientation.lock) {
+            window.screen.orientation.lock('landscape').catch((err) => {
+              console.warn('Orientation lock failed:', err);
+            });
+          }
+        })
         .catch(() => {});
     } else {
       document.exitFullscreen()
-        .then(() => setIsFullscreen(false))
+        .then(() => {
+          setIsFullscreen(false);
+          // Unlock orientation when exiting fullscreen
+          if (window.screen && window.screen.orientation && window.screen.orientation.unlock) {
+            try {
+              window.screen.orientation.unlock();
+            } catch (e) {}
+          }
+        })
         .catch(() => {});
     }
   };
 
   useEffect(() => {
     const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
+      const isFull = !!document.fullscreenElement;
+      setIsFullscreen(isFull);
+      
+      // If exiting fullscreen by any means (e.g. Esc or Android Back button), unlock orientation
+      if (!isFull) {
+        if (window.screen && window.screen.orientation && window.screen.orientation.unlock) {
+          try {
+            window.screen.orientation.unlock();
+          } catch (e) {}
+        }
+      }
     };
     document.addEventListener('fullscreenchange', handleFullscreenChange);
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);

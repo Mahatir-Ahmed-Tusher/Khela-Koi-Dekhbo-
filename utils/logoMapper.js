@@ -1,1366 +1,252 @@
 'use client';
 
-// LOGO_MAP matches channel names against keywords to find high-quality logos.
-// Values combine handpicked Wikimedia SVG logos and auto-fetched logos from the iptv-org database.
-const LOGO_MAP = [
-  {
-    "keywords": [
-      "somoy"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/1/14/Somoy_TV_logo.svg"
-  },
-  {
-    "keywords": [
-      "t sports",
-      "tsports"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/2/25/T-sports-logo.png"
-  },
-  {
-    "keywords": [
-      "caze"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo_Caz%C3%A9TV.png"
-  },
-  {
-    "keywords": [
-      "bein"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/c/c5/BeIN_Sports_logo.svg"
-  },
-  {
-    "keywords": [
-      "tsn"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/4/41/TSN_Logo.svg"
-  },
-  {
-    "keywords": [
-      "sport5"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/6f/Sport_5_logo.png"
-  },
-  {
-    "keywords": [
-      "dazn"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/2/23/DAZN_Logo.svg"
-  },
-  {
-    "keywords": [
-      "cctv"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e9/CCTV-5_logo.svg"
-  },
-  {
-    "keywords": [
-      "rtbgo",
-      "rtb go"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/f/ff/Radio_Television_Brunei_logo.png"
-  },
-  {
-    "keywords": [
-      "sportv"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/3/3d/SporTV_logo.svg"
-  },
-  {
-    "keywords": [
-      "trt",
-      "tr sport",
-      "idman"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/8/87/TRT_Spor_logo_2021.svg"
-  },
-  {
-    "keywords": [
-      "dsports",
-      "d sports"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/D_Sports_logo.svg/1024px-D_Sports_logo.svg.png"
-  },
-  {
-    "keywords": [
-      "fussball"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/2026_FIFA_World_Cup_emblem.svg/1280px-2026_FIFA_World_Cup_emblem.svg.png"
-  },
-  {
-    "keywords": [
-      "joj"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/3/36/JOJ_Group_logo.png"
-  },
-  {
-    "keywords": [
-      "tvp"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/3/34/TVP_Sport_logo_2021.svg"
-  },
-  {
-    "keywords": [
-      "real madrid",
-      "rmtv"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/d/de/Real_Madrid_TV_Logo.png"
-  },
-  {
-    "keywords": [
-      "willow"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/0/07/Willow_logo.png"
-  },
-  {
-    "keywords": [
-      "fancode"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/8/8a/FanCode_Logo.png"
-  },
-  {
-    "keywords": [
-      "telemundo"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/1/1e/Telemundo_logo.svg"
-  },
-  {
-    "keywords": [
-      "fox sports",
-      "fox sports 2",
-      "fox ny",
-      "fox 11",
-      "fx sports",
-      "fx prem"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/1/17/Fox_Sports_logo.svg"
-  },
-  {
-    "keywords": [
-      "quran"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Saudi_Quran_logo.png"
-  },
-  {
-    "keywords": [
-      "btv"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/b/b6/BTV_logo.svg"
-  },
-  {
-    "keywords": [
-      "sansad"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/8/85/Sansad_TV_logo.png"
-  },
-  {
-    "keywords": [
-      "ptv"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/d/d2/PTV_Sports_logo_2022.svg"
-  },
-  {
-    "keywords": [
-      "tyc"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/67/TyC_Sports_Logo_2021.png"
-  },
-  {
-    "keywords": [
-      "fubo"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/b/ba/Fubo_TV_logo.svg"
-  },
-  {
-    "keywords": [
-      "redbull",
-      "red bull"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e5/Red_Bull_TV_logo.svg"
-  },
-  {
-    "keywords": [
-      "fight network"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Fight_Network_logo.png"
-  },
-  {
-    "keywords": [
-      "fuel tv"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/f/ff/FUEL_TV_Logo.svg"
-  },
-  {
-    "keywords": [
-      "horse & country"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/2/23/Horse_%26_Country_logo.png"
-  },
-  {
-    "keywords": [
-      "sport italia",
-      "sportitalia"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/3/30/Sportitalia_logo_2019.png"
-  },
-  {
-    "keywords": [
-      "cignal"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/0/07/Cignal_logo.png"
-  },
-  {
-    "keywords": [
-      "sky"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/3/34/Sky_Sports_logo_2020.svg"
-  },
-  {
-    "keywords": [
-      "starhub"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/6f/StarHub_Logo.svg"
-  },
-  {
-    "keywords": [
-      "star sports",
-      "sspts"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/5/52/Star_Sports_logo.svg"
-  },
-  {
-    "keywords": [
-      "espn"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/2/2f/ESPN_wordmark.svg"
-  },
-  {
-    "keywords": [
-      "sony max"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/c/cc/Sony_MAX_logo.svg"
-  },
-  {
-    "keywords": [
-      "star jalsha"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/69/Star_Jalsha_logo.png"
-  },
-  {
-    "keywords": [
-      "zee bangla"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/a/ab/Zee_Bangla_Logo.png"
-  },
-  {
-    "keywords": [
-      "colors bangla"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/d/de/Colors_Bangla_logo.png"
-  },
-  {
-    "keywords": [
-      "ntv"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/8/87/NTV_Bangladesh_logo.png"
-  },
-  {
-    "keywords": [
-      "rtv"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/d/dc/RTV_Bangladesh_Logo.png"
-  },
-  {
-    "keywords": [
-      "jamuna"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/a/ae/Jamuna_Television_logo.png"
-  },
-  {
-    "keywords": [
-      "ekattor"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Ekattor_TV_logo.png"
-  },
-  {
-    "keywords": [
-      "channel i"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/8/89/Channel_i_logo.png"
-  },
-  {
-    "keywords": [
-      "duronto"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Duronto_TV_logo.png"
-  },
-  {
-    "keywords": [
-      "banglavision",
-      "bangla vision"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Banglavision_logo.svg/1024px-Banglavision_logo.svg.png"
-  },
-  {
-    "keywords": [
-      "independent tv"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Independent_Television_logo.png"
-  },
-  {
-    "keywords": [
-      "dbc news"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/d/d3/DBC_News_logo.png"
-  },
-  {
-    "keywords": [
-      "maasranga"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/3/36/Maasranga_TV_logo.png"
-  },
-  {
-    "keywords": [
-      "deepto"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/e/ec/Deepto_TV_logo.png"
-  },
-  {
-    "keywords": [
-      "republic bangla"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/c/c5/Republic_Media_Network_Logo.png"
-  },
-  {
-    "keywords": [
-      "dd national"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/a/a2/DD_National_logo.svg"
-  },
-  {
-    "keywords": [
-      "goldmines"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/2/23/Goldmines_Telefilms_logo.png"
-  },
-  {
-    "keywords": [
-      "channel 24"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/e/ee/Channel_24_Bangladesh_logo.png"
-  },
-  {
-    "keywords": [
-      "channel 9"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/5/52/Channel_9_Bangladesh_Logo.png"
-  },
-  {
-    "keywords": [
-      "atn news"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/1/13/ATN_News_logo.png"
-  },
-  {
-    "keywords": [
-      "atn bangla"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/f/f6/ATN_Bangla_logo.png"
-  },
-  {
-    "keywords": [
-      "news 24",
-      "news24 bd"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/b/b3/News_24_Bangladesh_Logo.png"
-  },
-  {
-    "keywords": [
-      "desh tv"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Desh_TV_logo.png"
-  },
-  {
-    "keywords": [
-      "bijoy tv"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/6f/Bijoy_TV_logo.png"
-  },
-  {
-    "keywords": [
-      "sony aath"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/8/87/Sony_Aath_logo.png"
-  },
-  {
-    "keywords": [
-      "g-series",
-      "g series"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/c/c2/G-Series_logo.png"
-  },
-  {
-    "keywords": [
-      "etv josh",
-      "etv network"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/d/df/ETV_Network_Logo.svg"
-  },
-  {
-    "keywords": [
-      "oli tv"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/1/10/Colors_Bangla_logo.png"
-  },
-  {
-    "keywords": [
-      "asports",
-      "a sports"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/5/54/A_Sports_logo.png"
-  },
-  {
-    "keywords": [
-      "a spor"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/c/ce/A_Spor_logo.png"
-  },
-  {
-    "keywords": [
-      "euro tv sports",
-      "eurosport"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/7/70/Eurosport_logo.svg"
-  },
-  {
-    "keywords": [
-      "dd sports"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/9/91/DD_Sports_logo.svg"
-  },
-  {
-    "keywords": [
-      "cricket gold"
-    ],
-    "logo": "https://resources.cricket-australia.pulselive.com/cricket-australia/photo/2025/07/25/836eddae-4329-4542-ad17-dcd37e9d951a/Cricket-Gold-1920x1080_noBG.png"
-  },
-  {
-    "keywords": [
-      "channel 1 news 4k"
-    ],
-    "logo": "https://i.imgur.com/CZy4Cqi.png"
-  },
-  {
-    "keywords": [
-      "star news bd"
-    ],
-    "logo": "https://i.imgur.com/TWFDkap.png"
-  },
-  {
-    "keywords": [
-      "ananda tv"
-    ],
-    "logo": "https://hosting.renderforestsites.com/35126779/1641323/media/080149eae7588f361ccb01b1387c00ca.webp"
-  },
-  {
-    "keywords": [
-      "boishakhi tv"
-    ],
-    "logo": "https://i.imgur.com/gxL05Y4.png"
-  },
-  {
-    "keywords": [
-      "bangla tv"
-    ],
-    "logo": "https://i.imgur.com/rKRsYAP.png"
-  },
-  {
-    "keywords": [
-      "sa tv"
-    ],
-    "logo": "https://i.imgur.com/tL9kxxB.png"
-  },
-  {
-    "keywords": [
-      "ekhon tv"
-    ],
-    "logo": "https://i.imgur.com/tRrDh6z.png"
-  },
-  {
-    "keywords": [
-      "ekushe tv"
-    ],
-    "logo": "https://i.imgur.com/lRpkGHj.png"
-  },
-  {
-    "keywords": [
-      "my tv"
-    ],
-    "logo": "https://i.imgur.com/475qK5T.png"
-  },
-  {
-    "keywords": [
-      "nexus tv"
-    ],
-    "logo": "https://i.imgur.com/XcJZKg4.png"
-  },
-  {
-    "keywords": [
-      "channel s tv"
-    ],
-    "logo": "https://www.channels.com.bd/storage/project_files/logo/2024-05-14a_n17156821814310.png"
-  },
-  {
-    "keywords": [
-      "srk tv"
-    ],
-    "logo": "https://i.imgur.com/6PqxuhF.png"
-  },
-  {
-    "keywords": [
-      "eet tv"
-    ],
-    "logo": "https://i.imgur.com/rntSEDZ.png"
-  },
-  {
-    "keywords": [
-      "gangaur tv"
-    ],
-    "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/Gangaur.png"
-  },
-  {
-    "keywords": [
-      "gtc punjabi"
-    ],
-    "logo": "https://media.thegtcnetwork.com/uploads/gtc-pujabin-s.jpg"
-  },
-  {
-    "keywords": [
-      "mazhavil manorama hd"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_MAZHAVIL_MANORAMA/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "ptc punjabi"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_PTC_PUNJABI/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "ptc punjabi gold"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_PTC_PUNJABI_GOLD/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "roja tv"
-    ],
-    "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/rojatv.png"
-  },
-  {
-    "keywords": [
-      "subin tv"
-    ],
-    "logo": "https://www.subintv.in/SUBINLOGO.png"
-  },
-  {
-    "keywords": [
-      "suriya tv"
-    ],
-    "logo": "https://play-lh.googleusercontent.com/izaQp_W1pZqa_fKqG0fGcWv9ls74BpIE-W1yOZBiw-gG0bSrcBNIvw3EY9SR4RyQYAlT=w480-h960-rw"
-  },
-  {
-    "keywords": [
-      "telugu one"
-    ],
-    "logo": "https://tvpnlogopus.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/IN400058AF_20260311T004509SQUARE.png"
-  },
-  {
-    "keywords": [
-      "raj digital plus"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_RAJ_DIGITAL_PLUS/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "roja movies"
-    ],
-    "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/rojamovies.png"
-  },
-  {
-    "keywords": [
-      "thalaa tv"
-    ],
-    "logo": "https://d229kpbsb5jevy.cloudfront.net/yuppfast/content/common/channel/logos/thalaa-tv.png"
-  },
-  {
-    "keywords": [
-      "tolly tv"
-    ],
-    "logo": "https://d229kpbsb5jevy.cloudfront.net/yuppfast/content/common/channel/logos/aumnrs.png"
-  },
-  {
-    "keywords": [
-      "9x tashan"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_9X_TASHAN/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "9x jalwa"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_9X_JALWA/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "9x jalwa hd"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_9X_JALWA/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "9x jhakaas"
-    ],
-    "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/9xjhakaas.png"
-  },
-  {
-    "keywords": [
-      "9xm"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_9XM/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "sangeet bangla"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_SANGEET_BANGLA/images/LOGO_HD/LOGO_HD_image.png"
-  },
-  {
-    "keywords": [
-      "aaryaa tv"
-    ],
-    "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/aryatvtamil.png"
-  },
-  {
-    "keywords": [
-      "etv music"
-    ],
-    "logo": "https://tvpnlogopus.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/IN4900002RV_20250811T033455SQUARE.png"
-  },
-  {
-    "keywords": [
-      "punjabi hits"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_PUNJABI_HITS/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "qello concerts"
-    ],
-    "logo": "https://i.imgur.com/IRyFTWq.png"
-  },
-  {
-    "keywords": [
-      "raj musix tamil"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_RAJ_MUSIX_TAMIL/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "sana plus"
-    ],
-    "logo": "https://ltsk-cdn.s3.eu-west-1.amazonaws.com/jumpstart/Temp_Live/cdn/HLS/Channel/transparentImages/SANA-PLUS-LOGO_2000_X_1125_Transpharent.png"
-  },
-  {
-    "keywords": [
-      "stingray classic rock"
-    ],
-    "logo": "https://i.imgur.com/FBgu8yB.png"
-  },
-  {
-    "keywords": [
-      "stingray djazz"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Stingray_Djazz.png/960px-Stingray_Djazz.png"
-  },
-  {
-    "keywords": [
-      "stingray easy listening"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Stingray_Music_logo.svg/960px-Stingray_Music_logo.svg.png"
-  },
-  {
-    "keywords": [
-      "stingray naturescape"
-    ],
-    "logo": "https://i.imgur.com/882kd90.png"
-  },
-  {
-    "keywords": [
-      "stingray the spa"
-    ],
-    "logo": "https://i.imgur.com/ywAN923.png"
-  },
-  {
-    "keywords": [
-      "stingray kpop"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Stingray_Music_logo.svg/960px-Stingray_Music_logo.svg.png"
-  },
-  {
-    "keywords": [
-      "ultimate tv"
-    ],
-    "logo": "https://ltsk-cdn.s3.eu-west-1.amazonaws.com/jumpstart/Temp_Live/cdn/HLS/Channel/transparentImages/U-Tv-logo_2000_X_1125_Transpharent.png"
-  },
-  {
-    "keywords": [
-      "doraemon tv"
-    ],
-    "logo": "https://i.imgur.com/zJuSbmU.png"
-  },
-  {
-    "keywords": [
-      "mr bean animated"
-    ],
-    "logo": "https://static.wikia.nocookie.net/logopedia/images/2/25/Mr._Bean_Animated_Series_stacked_logo.png"
-  },
-  {
-    "keywords": [
-      "cartoon network"
-    ],
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Cartoon_Network_2010_logo.svg/960px-Cartoon_Network_2010_logo.svg.png"
-  },
-  {
-    "keywords": [
-      "aaj tak hd"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_AAJ_TAK/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "abp news"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_ABP_NEWS/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "abp ananda"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_ABP_ANANDA/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "abp asmita"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_ABP_ASMITA/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "abp ganga"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/DISTROTV/LIVECHANNEL/66698920bac4421ebc533666/images/logo_20231219_183752_65.png"
-  },
-  {
-    "keywords": [
-      "akd calcutta news"
-    ],
-    "logo": "https://ltsk-cdn.s3.eu-west-1.amazonaws.com/jumpstart/Temp_Live/cdn/HLS/Channel/transparentImages/Calcutta%20News.png"
-  },
-  {
-    "keywords": [
-      "amarujala"
-    ],
-    "logo": "https://i.imgur.com/ndQ8LZp.png"
-  },
-  {
-    "keywords": [
-      "asianet suvarna news"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_ASIANET_SUVARNA_NEWS/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "bharat24"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_BHARAT_24/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "chardikla gurbaani tv"
-    ],
-    "logo": "https://i.imgur.com/NXD8CPq.png"
-  },
-  {
-    "keywords": [
-      "chardikla time tv"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_CHARDIKLA_TIME_TV/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "chardikla time tv na"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_CHARDIKLA_TIME_TV/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "ctvn akd plus"
-    ],
-    "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/CTVN_AKD_Plus.png"
-  },
-  {
-    "keywords": [
-      "dd news hd"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_DD_INDIA_HD/images/LOGO_HD/LOGO_HD_image.png"
-  },
-  {
-    "keywords": [
-      "etv news"
-    ],
-    "logo": "https://i.imgur.com/qTO3g37.png"
-  },
-  {
-    "keywords": [
-      "global punjab"
-    ],
-    "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/Global_Punjab.png"
-  },
-  {
-    "keywords": [
-      "guarantee news"
-    ],
-    "logo": "https://media.licdn.com/dms/image/v2/D560BAQHYZzbGJ7ViZA/company-logo_200_200/company-logo_200_200/0/1728031377890?e=2147483647&v=beta&t=bIsZgNUCcg0M_-Zqeu5wKYgBt_1-pI798X9lP5CxhTM"
-  },
-  {
-    "keywords": [
-      "hamdard tv"
-    ],
-    "logo": "https://i.ibb.co/JcD2xck/logo-hamda.png"
-  },
-  {
-    "keywords": [
-      "india daily live"
-    ],
-    "logo": "https://ltsk-cdn.s3.eu-west-1.amazonaws.com/jumpstart/Temp_Live/cdn/HLS/Channel/transparentImages/IndiaDaily24x7_2025_transparent.png"
-  },
-  {
-    "keywords": [
-      "kannur vision"
-    ],
-    "logo": "https://i.imgur.com/FCXqPer.png"
-  },
-  {
-    "keywords": [
-      "living india news"
-    ],
-    "logo": "https://i.imgur.com/6iMo6kt.png"
-  },
-  {
-    "keywords": [
-      "ndtv marathi"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_NDTV_MARATHI/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "ndtv rajasthan"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_NDTV_RAJASTHAN/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "news9live"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_NEWS9/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "news18 bangla"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_NEWS18_BANGLA/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "news18 bihar jharkhand"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_NEWS18_BIHAR_JHARKHAND/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "news18 delhi ncr jk"
-    ],
-    "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/News18JKLH.png"
-  },
-  {
-    "keywords": [
-      "news18 gujarati"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_NEWS18_GUJARATI/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "news18 india"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_NEWS18_BANGLA/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "news18 kannada"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_NEWS18_KANNADA/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "news18 kerala"
-    ],
-    "logo": "https://i.postimg.cc/XqPvDXrG/News18_Kerala.png"
-  },
-  {
-    "keywords": [
-      "news18 marathi"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_NEWS18_LOKMAT/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "news18 odia"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_NEWS18_ODIA/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "news18 punjab haryana hp"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_NEWS18_PUNJAB_HARYANA/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "news18 rajasthan"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_NEWS18_RAJASTHAN/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "news18 tamil nadu"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_NEWS18_TAMIL_NADU/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "news18 urdu"
-    ],
-    "logo": "https://i.imgur.com/8xnwMRR.png"
-  },
-  {
-    "keywords": [
-      "news nation"
-    ],
-    "logo": "https://i.imgur.com/h3TY38F.png"
-  },
-  {
-    "keywords": [
-      "prime9 news"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_CHANNEL_36_UP_UK/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "prudent media"
-    ],
-    "logo": "https://i.imgur.com/DG0x4UD.png"
-  },
-  {
-    "keywords": [
-      "republic bharat"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_R_BHARAT/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "republic kannada"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_RSYMDOTKANNADA/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "republic tv"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_REPUBLIC_TV/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "rozana spokesman"
-    ],
-    "logo": "https://www.rozanaspokesman.in/images/logospokesman.png"
-  },
-  {
-    "keywords": [
-      "rt india"
-    ],
-    "logo": "https://i.imgur.com/55SK22l.png"
-  },
-  {
-    "keywords": [
-      "samay kolkata"
-    ],
-    "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/Samay_Kolkata.png"
-  },
-  {
-    "keywords": [
-      "sudarshan news"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_SUDARSHAN_NEWS/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "swatantra tv"
-    ],
-    "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/Swatantra_News.png"
-  },
-  {
-    "keywords": [
-      "times now navbharat"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/TIMESPLAY/LIVECHANNEL/6904ba4339f3b175376a61e0/images/LOGO_HD/LOGO_HD_asIWhlk80_TimesNowBharat1_1.png"
-  },
-  {
-    "keywords": [
-      "tnp news"
-    ],
-    "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/TNP_News.png"
-  },
-  {
-    "keywords": [
-      "zee news"
-    ],
-    "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/Zee_Kannada_News.png"
-  },
-  {
-    "keywords": [
-      "peace tv bangla"
-    ],
-    "logo": "https://i.imgur.com/1ztVXUi.png"
-  },
-  {
-    "keywords": [
-      "anand tv"
-    ],
-    "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/Anand_TV.png"
-  },
-  {
-    "keywords": [
-      "channel divya"
-    ],
-    "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/Divya_TV.png"
-  },
-  {
-    "keywords": [
-      "fateh tv"
-    ],
-    "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/Fateh_TV.png"
-  },
-  {
-    "keywords": [
-      "hebron tv"
-    ],
-    "logo": "https://i0.wp.com/hebrontv.in/wp-content/uploads/2023/11/hebron-.png?w=512"
-  },
-  {
-    "keywords": [
-      "mahaa bhakti"
-    ],
-    "logo": "https://yt3.googleusercontent.com/OWECRvCVJh-dXU2MTRZhMRIDvFvcWan0YMoWWfXsM5_WEHobQy2QoHQbGr7AZUXzMOByTMAXbg=s900-c-k-c0x00ffffff-no-rj"
-  },
-  {
-    "keywords": [
-      "mercy tv"
-    ],
-    "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/Rujumargam_TV.png"
-  },
-  {
-    "keywords": [
-      "pmc telugu"
-    ],
-    "logo": "https://www.pmconlinetv.com/wp-content/uploads/2023/03/PMC-Telugu-Logo-85x85.png"
-  },
-  {
-    "keywords": [
-      "salvation tv"
-    ],
-    "logo": "https://content.jdmagicbox.com/comp/bangalore/l5/080pxx80.xx80.150207120517.e4l5/catalogue/salvation-tv-network-pvt-m-g-road-bangalore-religious-organizations-1sabn2d.jpg"
-  },
-  {
-    "keywords": [
-      "sanskar web tv"
-    ],
-    "logo": "https://i.imgur.com/mu2B6hw.png"
-  },
-  {
-    "keywords": [
-      "sanskar tv"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_SANSKAR/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "satsang tv"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_SATSANG/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "satsang web tv"
-    ],
-    "logo": "https://i.imgur.com/40kNu1w.png"
-  },
-  {
-    "keywords": [
-      "shalom tv"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_SHALOM_TV/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "svbc 2"
-    ],
-    "logo": "https://ltsk-cdn.s3.eu-west-1.amazonaws.com/jumpstart/Temp_Live/cdn/HLS/Channel/transparentImages/SVBC%202.png"
-  },
-  {
-    "keywords": [
-      "svbc 4"
-    ],
-    "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/SVBC4.png"
-  },
-  {
-    "keywords": [
-      "total bhakti"
-    ],
-    "logo": "https://i.imgur.com/LPwRdmF.png"
-  },
-  {
-    "keywords": [
-      "cnbc tv18"
-    ],
-    "logo": "https://www.cnbctv18.com/static/images/cnbc-new-logo/cnbc-new-livetv.svg"
-  },
-  {
-    "keywords": [
-      "cnbc tv18 prime hd"
-    ],
-    "logo": "https://www.cnbctv18.com/static/images/cnbc-new-logo/cnbc-prime-livetv.svg"
-  },
-  {
-    "keywords": [
-      "cnbc awaaz"
-    ],
-    "logo": "https://www.cnbctv18.com/static/images/cnbc-new-logo/cnbc-awaaz-livetv.svg"
-  },
-  {
-    "keywords": [
-      "cnbc bajar"
-    ],
-    "logo": "https://www.cnbctv18.com/static/images/cnbc-new-logo/cnbc-gujrati-livetv.svg"
-  },
-  {
-    "keywords": [
-      "ndtv profit"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_NDTV_PROFIT_PRIME/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "dd india"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_DD_INDIA_HD/images/LOGO_HD/LOGO_HD_image.png"
-  },
-  {
-    "keywords": [
-      "dd tamil"
-    ],
-    "logo": "https://yt3.googleusercontent.com/gOPDl0p0Ssungy3AfKG9MNHeW1QEwRmoFw0_dwDsUulDPE5Hv9nicA3MCjYyzYInzw8kbd5C=s900-c-k-c0x00ffffff-no-rj"
-  },
-  {
-    "keywords": [
-      "metro tv"
-    ],
-    "logo": "https://i.imgur.com/D4nRp62.png"
-  },
-  {
-    "keywords": [
-      "nkr tv kannada"
-    ],
-    "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/NKRTV.png"
-  },
-  {
-    "keywords": [
-      "tv brics english"
-    ],
-    "logo": "https://i.imgur.com/8rKNuS6.png"
-  },
-  {
-    "keywords": [
-      "pravasi channel"
-    ],
-    "logo": "https://i.imgur.com/1dHarb7.png"
-  },
-  {
-    "keywords": [
-      "shekinah tv"
-    ],
-    "logo": "https://ltsk-cdn.s3.eu-west-1.amazonaws.com/jumpstart/Temp_Live/cdn/HLS/Channel/transparentImages/SHEKINAH-LOGO_2000_X_1125_Transpharent.png"
-  },
-  {
-    "keywords": [
-      "shubh tv"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_SHUBH_TV/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "tamilan tv"
-    ],
-    "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/Tamilan_Television.png"
-  },
-  {
-    "keywords": [
-      "history tv18 hd"
-    ],
-    "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_HISTORY_TV18/images/LOGO_HD/image.png"
-  },
-  {
-    "keywords": [
-      "inwild"
-    ],
-    "logo": "https://cdn.uc.assets.prezly.com/92770c71-9d6f-400f-8311-38e9cfec52c2/InWild_landscape-green.png"
-  },
-  {
-    "keywords": [
-      "inwonder"
-    ],
-    "logo": "https://cdn.uc.assets.prezly.com/f12e798d-6da4-46e1-8ec5-e391d6762659/InWonder_portrait-purple.png"
-  },
-  {
-    "keywords": [
-      "adventure earth"
-    ],
-    "logo": "https://i.imgur.com/94Pq9Io.png"
-  },
-  {
-    "keywords": [
-      "etv comedy"
-    ],
-    "logo": "https://tvpnlogopus.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/IN4900003U3_20251106T195117SQUARE.png"
-  },
-  {
-    "keywords": [
-      "2tv sport"
-    ],
-    "logo": "https://i.imgur.com/sZUIhGc.png"
-  },
-  {
-    "keywords": [
-      "unknown"
-    ],
-    "logo": "https://i.imgur.com/dAO9llk.png"
-  },
-  {
-    "keywords": [
-      "rajdhani tv"
-    ],
-    "logo": "https://i.imgur.com/MBm2gPz.jpeg"
-  },
-  {
-    "keywords": [
-      "rs news"
-    ],
-    "logo": "https://i.imgur.com/FSkYLPK.png"
-  },
-  {
-    "keywords": [
-      "rs sports 1"
-    ],
-    "logo": "https://i.imgur.com/CZy4Cqi.png"
-  },
-  {
-    "keywords": [
-      "rs sports 2"
-    ],
-    "logo": "https://i.imgur.com/FJBL6zI.png"
-  },
-  {
-    "keywords": [
-      "rs sports 3"
-    ],
-    "logo": "https://i.imgur.com/YRiulCU.png"
-  },
-  {
-    "keywords": [
-      "rs sports 4"
-    ],
-    "logo": "https://i.imgur.com/5KlJk5n.png"
-  },
-  {
-    "keywords": [
-      "rs sports 5"
-    ],
-    "logo": "https://i.imgur.com/SyXVJdM.png"
-  },
-  {
-    "keywords": [
-      "rs tv"
-    ],
-    "logo": "https://i.imgur.com/FSkYLPK.png"
-  },
-  {
-    "keywords": [
-      "rs news web"
-    ],
-    "logo": "https://i.ibb.co/WzLwj3X/IMG-20230703-155036.jpg"
-  },
-  {
-    "keywords": [
-      "rs premiere"
-    ],
-    "logo": "https://i.imgur.com/BURPHzI.png"
-  },
-  {
-    "keywords": [
-      "rs premiere 2"
-    ],
-    "logo": "https://i.imgur.com/BURPHzI.png"
-  },
-  {
-    "keywords": [
-      "rs premiere 3"
-    ],
-    "logo": "https://i.imgur.com/BURPHzI.png"
-  },
-  {
-    "keywords": [
-      "rs premiere 4"
-    ],
-    "logo": "https://i.imgur.com/BURPHzI.png"
-  },
-  {
-    "keywords": [
-      "azteca 7a"
-    ],
-    "logo": "https://i.imgur.com/UtFXjIn.png"
-  },
-  {
-    "keywords": [
-      "masr"
-    ],
-    "logo": "https://i.ibb.co/JHxGNmf/logo-63c09708736e15-74858373-64636840.png"
-  },
-  {
-    "keywords": [
-      "azteca 7"
-    ],
-    "logo": "https://i.imgur.com/UtFXjIn.png"
-  }
+// LOGO_DICTIONARY: Direct exact channel mappings provided by the user.
+// Maps exact/case-insensitive channel names directly to Wikipedia-hosted optimized PNG/SVG files.
+const LOGO_DICTIONARY = {
+  "somoy tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Somoy_Television_Logo.svg/200px-Somoy_Television_Logo.svg.png",
+  "somoy tv new": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Somoy_Television_Logo.svg/200px-Somoy_Television_Logo.svg.png",
+  "ntv": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/NTV_Bangladesh_Logo.svg/200px-NTV_Bangladesh_Logo.svg.png",
+  "rtv": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/RTV_Bangladesh.svg/200px-RTV_Bangladesh.svg.png",
+  "btv": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/BTV_Logo.svg/200px-BTV_Logo.svg.png",
+  "btv  bangladesh": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/BTV_Logo.svg/200px-BTV_Logo.svg.png",
+  "btv bangladesh": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/BTV_Logo.svg/200px-BTV_Logo.svg.png",
+  "jamuna tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Jamuna_Television_Logo.svg/200px-Jamuna_Television_Logo.svg.png",
+  "ekattor tv hd": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Ekattor_TV_Logo.svg/200px-Ekattor_TV_Logo.svg.png",
+  "channel i": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/ChannelIBD.svg/200px-ChannelIBD.svg.png",
+  "channel 24": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Channel_24_Bangladesh.svg/200px-Channel_24_Bangladesh.svg.png",
+  "channel 9 hd": "https://upload.wikimedia.org/wikipedia/en/thumb/7/7e/Channel_9_Bangladesh.png/200px-Channel_9_Bangladesh.png",
+  "channel 1 news 4k": "https://upload.wikimedia.org/wikipedia/en/a/a2/Channel_1_Bangladesh.png",
+  "atn news hd": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/ATN_Bangla.svg/200px-ATN_Bangla.svg.png",
+  "deepto tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Deepto_TV_logo.svg/200px-Deepto_TV_logo.svg.png",
+  "news 24": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/News24_Bangladesh_logo.svg/200px-News24_Bangladesh_logo.svg.png",
+  "dbc news": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/DBC_News_logo.svg/200px-DBC_News_logo.svg.png",
+  "maasranga tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Maasranga_Television.svg/200px-Maasranga_Television.svg.png",
+  "bangla vision": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BanglaVision_TV_logo.svg/200px-BanglaVision_TV_logo.svg.png",
+  "star news bd": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Star_News_Bangladesh.png/200px-Star_News_Bangladesh.png",
+  "ananda tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Ananda_TV_Logo.svg/200px-Ananda_TV_Logo.svg.png",
+  "boishakhi tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Boishakhi_Media_Limited.svg/200px-Boishakhi_Media_Limited.svg.png",
+  "bangla tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Bangla_TV_logo.svg/200px-Bangla_TV_logo.svg.png",
+  "desh tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Desh_TV_logo.svg/200px-Desh_TV_logo.svg.png",
+  "sa tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/SA_Television.svg/200px-SA_Television.svg.png",
+  "ekhon tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Ekhon_TV.png/200px-Ekhon_TV.png",
+  "ekushe tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/ETV_Bangladesh.svg/200px-ETV_Bangladesh.svg.png",
+  "independent tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Independent_Television_Bangladesh.svg/200px-Independent_Television_Bangladesh.svg.png",
+  "my tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/MyTV_Bangladesh.png/200px-MyTV_Bangladesh.png",
+  "nexus tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Nexus_Television_Bangladesh.png/200px-Nexus_Television_Bangladesh.png",
+  "rajdhani tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Rajdhani_TV.png/200px-Rajdhani_TV.png",
+  "duronto live": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Duronto_TV.png/200px-Duronto_TV.png",
+  "channel s tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Channel_S_logo.svg/200px-Channel_S_logo.svg.png",
+  "t sports hd": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/T_Sports_logo.svg/200px-T_Sports_logo.svg.png",
+  "fifa 2026 — t sports": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/T_Sports_logo.svg/200px-T_Sports_logo.svg.png",
+  "fifa 2026 — t sports alt": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/T_Sports_logo.svg/200px-T_Sports_logo.svg.png",
+  "fifa 2026 — btv": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/BTV_Logo.svg/200px-BTV_Logo.svg.png",
+  "fifa 2026 — somoy tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Somoy_Television_Logo.svg/200px-Somoy_Television_Logo.svg.png",
+  "somoy fifa world cup 2026": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Somoy_Television_Logo.svg/200px-Somoy_Television_Logo.svg.png",
+  "fifa world cup 2026": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/2026_FIFA_World_Cup_emblem.svg/200px-2026_FIFA_World_Cup_emblem.svg.png",
+  "football world cup 2026 sky": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/2026_FIFA_World_Cup_emblem.svg/200px-2026_FIFA_World_Cup_emblem.svg.png",
+  "football world cup 2026 (fox sports)": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/2026_FIFA_World_Cup_emblem.svg/200px-2026_FIFA_World_Cup_emblem.svg.png",
+  "coze tv fifa world cup 2026": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/2026_FIFA_World_Cup_emblem.svg/200px-2026_FIFA_World_Cup_emblem.svg.png",
+  "fussball.tv 1": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/2026_FIFA_World_Cup_emblem.svg/200px-2026_FIFA_World_Cup_emblem.svg.png",
+  "fussball.tv 2": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/2026_FIFA_World_Cup_emblem.svg/200px-2026_FIFA_World_Cup_emblem.svg.png",
+  "bein sports 1": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+  "bein sports 2": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+  "bein sports 3": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+  "bein sports 4": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+  "bein sports 4 amagi": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+  "bein sports xtra": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+  "bein sports 1 alt": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+  "bein xtra (720)": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+  "bein sports 1 au": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+  "bein sports 2 au": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+  "bein sports 3 au": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+  "bein sports 1 1080p": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+  "bein sports 2 1080p": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+  "bein sports 3 1080p": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+  "bein sports 4 1080p": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+  "bein sports 5 1080p": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+  "bein sports 1 turkey": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+  "bein sports 2 turkey": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+  "bein sports 3 turkey": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+  "bein sports 4 turkey": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+  "bein sport extra ñ": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+  "bein sports ñ": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+  "bein xtra ñ *2": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+  "espn": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/ESPN_wordmark.svg/200px-ESPN_wordmark.svg.png",
+  "fox sports 2": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Fox_Sports_logo_%282019%29.svg/200px-Fox_Sports_logo_%282019%29.svg.png",
+  "fox sports (720)": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Fox_Sports_logo_%282019%29.svg/200px-Fox_Sports_logo_%282019%29.svg.png",
+  "fox ny": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/FOX_wordmark.svg/200px-FOX_wordmark.svg.png",
+  "fox 11 green bay wi (wluk)": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/FOX_wordmark.svg/200px-FOX_wordmark.svg.png",
+  "fifa 2026 — fox sports 2": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Fox_Sports_logo_%282019%29.svg/200px-Fox_Sports_logo_%282019%29.svg.png",
+  "star sports 1": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Star_Sports_logo.svg/200px-Star_Sports_logo.svg.png",
+  "star sports 1 alt": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Star_Sports_logo.svg/200px-Star_Sports_logo.svg.png",
+  "real madrid tv": "https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/200px-Real_Madrid_CF.svg.png",
+  "real madrid tv - english (oficial)": "https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/200px-Real_Madrid_CF.svg.png",
+  "caze tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Caze_TV_logo.png/200px-Caze_TV_logo.png",
+  "caze tv br": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Caze_TV_logo.png/200px-Caze_TV_logo.png",
+  "caze tv (720)": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Caze_TV_logo.png/200px-Caze_TV_logo.png",
+  "caze tv 2": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Caze_TV_logo.png/200px-Caze_TV_logo.png",
+  "caze tv 3": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Caze_TV_logo.png/200px-Caze_TV_logo.png",
+  "redbull tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Red_Bull_TV_logo.svg/200px-Red_Bull_TV_logo.svg.png",
+  "dazn fast+": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/DAZN_Logo.svg/200px-DAZN_Logo.svg.png",
+  "dazn combat": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/DAZN_Logo.svg/200px-DAZN_Logo.svg.png",
+  "dsports fhd": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/DIRECTV_Sports.svg/200px-DIRECTV_Sports.svg.png",
+  "cignal tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Cignal_TV_logo.png/200px-Cignal_TV_logo.png",
+  "idmantv": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Idman_TV_logo.png/200px-Idman_TV_logo.png",
+  "2tv sport": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/2TV_Georgia.png/200px-2TV_Georgia.png",
+  "fight network": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Fight_Network_logo.svg/200px-Fight_Network_logo.svg.png",
+  "fuel tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Fuel_TV_logo.svg/200px-Fuel_TV_logo.svg.png",
+  "horse & country": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Horse_%26_Country_TV_logo.png/200px-Horse_%26_Country_TV_logo.png",
+  "fubo sports 2": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/FuboTV_logo.svg/200px-FuboTV_logo.svg.png",
+  "willow sports": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Willow_TV.png/200px-Willow_TV.png",
+  "willow sports (1080p)": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Willow_TV.png/200px-Willow_TV.png",
+  "willow hd tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Willow_TV.png/200px-Willow_TV.png",
+  "cricket gold": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Cricket_Gold_logo.png/200px-Cricket_Gold_logo.png",
+  "asports": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/ARY_Sports_logo.png/200px-ARY_Sports_logo.png",
+  "ptv sports": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/PTV_Sports_logo.svg/200px-PTV_Sports_logo.svg.png",
+  "fifa 2026 — ptv sports": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/PTV_Sports_logo.svg/200px-PTV_Sports_logo.svg.png",
+  "tyc sports": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/TyC_Sports_Logo.svg/200px-TyC_Sports_Logo.svg.png",
+  "fifa 2026 — tyc sports": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/TyC_Sports_Logo.svg/200px-TyC_Sports_Logo.svg.png",
+  "tsn 1": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/TSN_2018.svg/200px-TSN_2018.svg.png",
+  "tsn 2": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/TSN_2018.svg/200px-TSN_2018.svg.png",
+  "tsn 3": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/TSN_2018.svg/200px-TSN_2018.svg.png",
+  "a spor": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/A_Spor_logo.svg/200px-A_Spor_logo.svg.png",
+  "sport italia": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Sport_Italia_logo.png/200px-Sport_Italia_logo.png",
+  "sport5": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Sport5_logo.svg/200px-Sport5_logo.svg.png",
+  "sportv 2": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/SporTV_logo.svg/200px-SporTV_logo.svg.png",
+  "sportv 3": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/SporTV_logo.svg/200px-SporTV_logo.svg.png",
+  "fx sports 2": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Fox_Sports_2_logo.svg/200px-Fox_Sports_2_logo.svg.png",
+  "fx prem": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Fox_Sports_logo_%282019%29.svg/200px-Fox_Sports_logo_%282019%29.svg.png",
+  "mtr sports-1": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/MTR_Sports.png/200px-MTR_Sports.png",
+  "euro tv sports hd": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Eurosport_logo.svg/200px-Eurosport_logo.svg.png",
+  "masr": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Al_Masriya_logo.png/200px-Al_Masriya_logo.png",
+  "deporte - estrella tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Estrella_TV.svg/200px-Estrella_TV.svg.png",
+  "azteca 7": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Azteca_7_logo.svg/200px-Azteca_7_logo.svg.png",
+  "azteca 7a": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Azteca_7_logo.svg/200px-Azteca_7_logo.svg.png",
+  "fancode": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/FanCode_logo.svg/200px-FanCode_logo.svg.png",
+  "star jalsha": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Star_Jalsha.svg/200px-Star_Jalsha.svg.png",
+  "zee bangla": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Zee_Bangla.svg/200px-Zee_Bangla.svg.png",
+  "colors bangla": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Colors_Bangla_logo.svg/200px-Colors_Bangla_logo.svg.png",
+  "republic bangla": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Republic_Bangla_logo.svg/200px-Republic_Bangla_logo.svg.png",
+  "republic bangla hd": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Republic_Bangla_logo.svg/200px-Republic_Bangla_logo.svg.png",
+  "dd national hd": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Dd_national.svg/200px-Dd_national.svg.png",
+  "etv josh": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/ETV_Josh_logo.png/200px-ETV_Josh_logo.png",
+  "mazhavil manorama hd": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Mazhavil_Manorama_Logo.png/200px-Mazhavil_Manorama_Logo.png",
+  "ptc punjabi": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/PTC_Punjabi_logo.png/200px-PTC_Punjabi_logo.png",
+  "ptc punjabi gold": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/PTC_Punjabi_logo.png/200px-PTC_Punjabi_logo.png",
+  "roja tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Roja_TV.png/200px-Roja_TV.png",
+  "suriya tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Surya_TV_logo.png/200px-Surya_TV_logo.png",
+  "telugu one": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Telugu_One_logo.png/200px-Telugu_One_logo.png",
+  "gtc punjabi": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/GTC_Punjabi.png/200px-GTC_Punjabi.png",
+  "goldmines": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Goldmines_Telefilms_logo.png/200px-Goldmines_Telefilms_logo.png",
+  "goldmines movies": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Goldmines_Telefilms_logo.png/200px-Goldmines_Telefilms_logo.png",
+  "goldmines bollywood": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Goldmines_Telefilms_logo.png/200px-Goldmines_Telefilms_logo.png",
+  "sony max": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Sony_MAX_logo.svg/200px-Sony_MAX_logo.svg.png",
+  "sony max hd": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Sony_MAX_logo.svg/200px-Sony_MAX_logo.svg.png",
+  "sony max 2": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Sony_MAX_logo.svg/200px-Sony_MAX_logo.svg.png",
+  "action hollywood": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Action_Hollywood_logo.png/200px-Action_Hollywood_logo.png",
+  "raj digital plus": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Raj_TV_logo.png/200px-Raj_TV_logo.png",
+  "9x tashan": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/9X_Tashan_logo.png/200px-9X_Tashan_logo.png",
+  "9x jalwa": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/9X_Jalwa_logo.png/200px-9X_Jalwa_logo.png",
+  "9x jalwa hd": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/9X_Jalwa_logo.png/200px-9X_Jalwa_logo.png",
+  "9x jhakaas": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/9X_Jhakaas_logo.png/200px-9X_Jhakaas_logo.png",
+  "9xm": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/9XM_logo.svg/200px-9XM_logo.svg.png",
+  "sangeet bangla": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Sangeet_Bangla.png/200px-Sangeet_Bangla.png",
+  "qello concerts": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Qello_logo.png/200px-Qello_logo.png",
+  "etv music": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/ETV_Music_logo.png/200px-ETV_Music_logo.png",
+  "raj musix tamil": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Raj_TV_logo.png/200px-Raj_TV_logo.png",
+  "stingray classic rock": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Stingray_Music_logo.png/200px-Stingray_Music_logo.png",
+  "stingray djazz": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Stingray_Music_logo.png/200px-Stingray_Music_logo.png",
+  "stingray easy listening": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Stingray_Music_logo.png/200px-Stingray_Music_logo.png",
+  "stingray kpop": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Stingray_Music_logo.png/200px-Stingray_Music_logo.png",
+  "stingray naturescape": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Stingray_Music_logo.png/200px-Stingray_Music_logo.png",
+  "stingray the spa": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Stingray_Music_logo.png/200px-Stingray_Music_logo.png",
+  "motu patlu": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Motu_Patlu_logo.png/200px-Motu_Patlu_logo.png",
+  "tom & jerry tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Tom_and_Jerry_logo.svg/200px-Tom_and_Jerry_logo.svg.png",
+  "doraemon tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Doraemon_logo.png/200px-Doraemon_logo.png",
+  "cartoon network": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Cartoon_Network_2010_logo.svg/200px-Cartoon_Network_2010_logo.svg.png",
+  "mr bean animated": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Mr_Bean_logo.png/200px-Mr_Bean_logo.png",
+  "aaj tak hd": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Aaj_Tak.svg/200px-Aaj_Tak.svg.png",
+  "abp news": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/ABP_News_Logo.svg/200px-ABP_News_Logo.svg.png",
+  "abp ananda": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/ABP_Ananda_logo.svg/200px-ABP_Ananda_logo.svg.png",
+  "abp asmita": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/ABP_News_Logo.svg/200px-ABP_News_Logo.svg.png",
+  "abp ganga": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/ABP_News_Logo.svg/200px-ABP_News_Logo.svg.png",
+  "ndtv mp chhattisgarh": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/NDTV_logo.svg/200px-NDTV_logo.svg.png",
+  "ndtv marathi": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/NDTV_logo.svg/200px-NDTV_logo.svg.png",
+  "ndtv rajasthan": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/NDTV_logo.svg/200px-NDTV_logo.svg.png",
+  "ndtv profit": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/NDTV_logo.svg/200px-NDTV_logo.svg.png",
+  "news18 assam ne": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/News18_India.svg/200px-News18_India.svg.png",
+  "news18 bangla": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/News18_India.svg/200px-News18_India.svg.png",
+  "news18 bihar jharkhand": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/News18_India.svg/200px-News18_India.svg.png",
+  "news18 delhi ncr jk": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/News18_India.svg/200px-News18_India.svg.png",
+  "news18 gujarati": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/News18_India.svg/200px-News18_India.svg.png",
+  "news18 india": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/News18_India.svg/200px-News18_India.svg.png",
+  "news18 kannada": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/News18_India.svg/200px-News18_India.svg.png",
+  "news18 kerala": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/News18_India.svg/200px-News18_India.svg.png",
+  "news18 mp chhattisgarh": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/News18_India.svg/200px-News18_India.svg.png",
+  "news18 marathi": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/News18_India.svg/200px-News18_India.svg.png",
+  "news18 odia": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/News18_India.svg/200px-News18_India.svg.png",
+  "news18 punjab haryana hp": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/News18_India.svg/200px-News18_India.svg.png",
+  "news18 rajasthan": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/News18_India.svg/200px-News18_India.svg.png",
+  "news18 tamil nadu": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/News18_India.svg/200px-News18_India.svg.png",
+  "news18 urdu": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/News18_India.svg/200px-News18_India.svg.png",
+  "news18 up uttarakhand": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/News18_India.svg/200px-News18_India.svg.png",
+  "republic tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Republic_TV_logo.svg/200px-Republic_TV_logo.svg.png",
+  "republic bharat": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Republic_Bharat_logo.svg/200px-Republic_Bharat_logo.svg.png",
+  "republic kannada": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Republic_TV_logo.svg/200px-Republic_TV_logo.svg.png",
+  "dd news hd": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/DD_News_logo.svg/200px-DD_News_logo.svg.png",
+  "etv news": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/ETV_News_logo.png/200px-ETV_News_logo.png",
+  "zee news": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Zee_News_logo.svg/200px-Zee_News_logo.svg.png",
+  "news nation": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/News_Nation.png/200px-News_Nation.png",
+  "news9live": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/News9_logo.png/200px-News9_logo.png",
+  "rt india": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/RT_logo.svg/200px-RT_logo.svg.png",
+  "asianet suvarna news": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Suvarna_News_logo.png/200px-Suvarna_News_logo.png",
+  "times now navbharat": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Times_Now_Navbharat.svg/200px-Times_Now_Navbharat.svg.png",
+  "ntv telugu": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/NTV_Telugu.png/200px-NTV_Telugu.png",
+  "cnbc tv18": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/CNBC-TV18_logo.svg/200px-CNBC-TV18_logo.svg.png",
+  "cnbc tv18 prime hd": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/CNBC-TV18_logo.svg/200px-CNBC-TV18_logo.svg.png",
+  "cnbc awaas": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/CNBC_Awaaz.svg/200px-CNBC_Awaaz.svg.png",
+  "cnbc bajar": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/CNBC_Awaaz.svg/200px-CNBC_Awaaz.svg.png",
+  "dd india": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/DD_India_logo.svg/200px-DD_India_logo.svg.png",
+  "dd tamil": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/DD_Tamil_logo.png/200px-DD_Tamil_logo.png",
+  "tv brics english": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/TV_BRICS_logo.png/200px-TV_BRICS_logo.png",
+  "history tv18 hd": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/History_TV18_logo.svg/200px-History_TV18_logo.svg.png",
+  "adventure earth": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Adventure_Earth_TV.png/200px-Adventure_Earth_TV.png",
+  "sansad tv 1": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Sansad_TV_logo.svg/200px-Sansad_TV_logo.svg.png",
+  "sansad tv 1 hd": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Sansad_TV_logo.svg/200px-Sansad_TV_logo.svg.png",
+  "sansad tv 2": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Sansad_TV_logo.svg/200px-Sansad_TV_logo.svg.png",
+  "etv comedy": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/ETV_Comedy_logo.png/200px-ETV_Comedy_logo.png",
+  "peace tv bangla": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Peace_TV_logo.png/200px-Peace_TV_logo.png",
+  "sanskar tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Sanskar_TV_logo.png/200px-Sanskar_TV_logo.png",
+  "sanskar web tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Sanskar_TV_logo.png/200px-Sanskar_TV_logo.png",
+  "shalom tv": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Shalom_TV_logo.svg/200px-Shalom_TV_logo.svg.png",
+  "total bhakti": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Total_Bhakti_logo.png/200px-Total_Bhakti_logo.png",
+  "mahaa bhakti": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/MahaBhakti_logo.png/200px-MahaBhakti_logo.png",
+  "svbc sri venkateswara": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/SVBC_TV_logo.png/200px-SVBC_TV_logo.png",
+  "svbc 2": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/SVBC_TV_logo.png/200px-SVBC_TV_logo.png",
+  "svbc 4": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/SVBC_TV_logo.png/200px-SVBC_TV_logo.png",
+  "quran": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Saudi_Quran_Channel_logo.svg/200px-Saudi_Quran_Channel_logo.svg.png"
+};
+
+// Keyword mapping for any secondary channels that might be added to the M3U later
+const FALLBACK_LOGO_MAP = [
+  { keywords: ['somoy'], logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Somoy_Television_Logo.svg/200px-Somoy_Television_Logo.svg.png' },
+  { keywords: ['t sports', 'tsports'], logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/T_Sports_logo.svg/200px-T_Sports_logo.svg.png' },
+  { keywords: ['caze'], logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Caze_TV_logo.png/200px-Caze_TV_logo.png' },
+  { keywords: ['bein'], logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png' },
+  { keywords: ['tsn'], logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/TSN_2018.svg/200px-TSN_2018.svg.png' },
+  { keywords: ['espn'], logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/ESPN_wordmark.svg/200px-ESPN_wordmark.svg.png' },
+  { keywords: ['fox sports', 'fox sports 2', 'fox ny', 'fox 11', 'fx sports', 'fx prem'], logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Fox_Sports_logo_%282019%29.svg/200px-Fox_Sports_logo_%282019%29.svg.png' },
+  { keywords: ['real madrid', 'rmtv'], logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/200px-Real_Madrid_CF.svg.png' },
+  { keywords: ['willow'], logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Willow_TV.png/200px-Willow_TV.png' },
+  { keywords: ['fancode'], logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/FanCode_logo.svg/200px-FanCode_logo.svg.png' },
+  { keywords: ['zee bangla'], logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Zee_Bangla.svg/200px-Zee_Bangla.svg.png' },
+  { keywords: ['star jalsha'], logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Star_Jalsha.svg/200px-Star_Jalsha.svg.png' },
+  { keywords: ['colors bangla'], logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Colors_Bangla_logo.svg/200px-Colors_Bangla_logo.svg.png' },
+  { keywords: ['btv'], logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/BTV_Logo.svg/200px-BTV_Logo.svg.png' },
+  { keywords: ['goldmines'], logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Goldmines_Telefilms_logo.png/200px-Goldmines_Telefilms_logo.png' },
+  { keywords: ['sony max'], logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Sony_MAX_logo.svg/200px-Sony_MAX_logo.svg.png' },
+  { keywords: ['cartoon network'], logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Cartoon_Network_2010_logo.svg/200px-Cartoon_Network_2010_logo.svg.png' },
+  { keywords: ['quran'], logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Saudi_Quran_Channel_logo.svg/200px-Saudi_Quran_Channel_logo.svg.png' }
 ];
 
 export function getChannelLogo(name = '', m3uLogo = '') {
@@ -1369,16 +255,33 @@ export function getChannelLogo(name = '', m3uLogo = '') {
     return m3uLogo.trim();
   }
 
-  // Try to match search terms in our official logo map
-  const nameLower = name.toLowerCase();
-  const matched = LOGO_MAP.find(item => 
-    item.keywords.some(keyword => nameLower.includes(keyword))
+  // Normalize name for lookup (lowercase and strip multiple spaces)
+  const cleanName = (name || '').toLowerCase().replace(/\s+/g, ' ').trim();
+
+  // Try exact lookup first
+  if (LOGO_DICTIONARY[cleanName]) {
+    return LOGO_DICTIONARY[cleanName];
+  }
+
+  // Try matching against our keys (e.g. if name is "Somoy TV HD" and key is "somoy tv")
+  for (const [key, value] of Object.entries(LOGO_DICTIONARY)) {
+    if (cleanName.includes(key) || key.includes(cleanName)) {
+      // Ensure it is a valid match, not a partial mismatch (e.g. 'caze' matching 'caze tv')
+      if (Math.abs(key.length - cleanName.length) < 8) {
+        return value;
+      }
+    }
+  }
+
+  // Try matching against our fallback keyword array
+  const matched = FALLBACK_LOGO_MAP.find(item => 
+    item.keywords.some(keyword => cleanName.includes(keyword))
   );
 
   if (matched) {
     return matched.logo;
   }
 
-  // Default fallback to a high-quality TV broadcast network logo
-  return 'https://upload.wikimedia.org/wikipedia/commons/3/34/TVP_Sport_logo_2021.svg';
+  // Default fallback to a high-quality general sports TV channel logo
+  return 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/2026_FIFA_World_Cup_emblem.svg/200px-2026_FIFA_World_Cup_emblem.svg.png';
 }
