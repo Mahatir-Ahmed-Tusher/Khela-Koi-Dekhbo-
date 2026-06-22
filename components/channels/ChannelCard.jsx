@@ -49,6 +49,7 @@ export default function ChannelCard({ channel, variant = 'desktop', onSelect }) 
                 onError={() => setImgError(true)}
                 className="w-full h-full object-contain p-1.5"
                 loading="lazy"
+                referrerPolicy="no-referrer"
               />
             ) : (
               <LogoAvatar name={channel.name} className="w-full h-full text-xs rounded-none" />
@@ -94,6 +95,7 @@ export default function ChannelCard({ channel, variant = 'desktop', onSelect }) 
               onError={() => setImgError(true)}
               className="w-full h-full object-contain p-2"
               loading="lazy"
+              referrerPolicy="no-referrer"
             />
           ) : (
             <LogoAvatar name={channel.name} className="w-full h-full text-[13px] rounded-none" />

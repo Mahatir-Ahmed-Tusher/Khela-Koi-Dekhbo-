@@ -530,7 +530,7 @@ export default function Home() {
               >
                 <div className="w-7 h-7 rounded bg-bg-elevated flex items-center justify-center shrink-0 border border-border-subtle/40 overflow-hidden">
                   {c.logo ? (
-                    <img src={c.logo} className="w-full h-full object-contain p-1" />
+                    <img src={c.logo} className="w-full h-full object-contain p-1" referrerPolicy="no-referrer" />
                   ) : (
                     <span className="text-[9px] font-bold">{c.name.substring(0, 2)}</span>
                   )}

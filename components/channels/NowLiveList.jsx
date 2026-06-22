@@ -54,6 +54,7 @@ export default function NowLiveList({
                     onError={() => handleImgError(channel.id)}
                     className="w-full h-full object-contain p-1"
                     loading="lazy"
+                    referrerPolicy="no-referrer"
                   />
                 ) : (
                   <LogoAvatar name={channel.name} className="w-full h-full text-[10px] rounded-none" />
